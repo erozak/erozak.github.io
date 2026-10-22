@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>erozak</title>
+  <link rel="canonical" href="https://github.com/erozak">
+  <meta http-equiv="refresh" content="5; url=https://github.com/erozak">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html {
+      padding: 20px 16px;
+      background: #1f1f1f;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 40px);
+      min-height: calc(100dvh - 40px);
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: #222;
+    }
+    .notice {
+      --light: #ff1078;
+      --light-tail: color-mix(in srgb, var(--light) 45%, transparent);
+      position: relative;
+      width: 100%;
+      padding: 24px 16px;
+      border: 3px solid rgb(0 0 0 / 15%);
+      border-radius: 4px;
+      background: #fff;
+      text-align: center;
+      line-height: 1.6;
+      box-shadow: 0 0 12px rgb(255 16 120 / 25%);
+    }
+    .notice p { margin: 0; }
+    .notice a { color: var(--light); }
+    .notice-light {
+      position: absolute;
+      inset: -3px;
+      padding: 8px;
+      overflow: hidden;
+      pointer-events: none;
+      border-radius: inherit;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+    }
+    .notice-light::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 300%;
+      height: 300%;
+      transform: translate(-10%, -10%);
+      background: linear-gradient(160deg, transparent 0% 15%, var(--light) 20%, var(--light-tail) 25%, transparent 35% 55%, var(--light) 60%, var(--light-tail) 65%, transparent 75% 95%, var(--light) 100%);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .notice-light::before {
+        will-change: transform;
+        animation: notice-light 2.23s linear infinite reverse;
+      }
+    }
+    @keyframes notice-light {
+      from { transform: translate(-10%, -10%); }
+      to { transform: translate(-50%, -50%); }
+    }
+  </style>
+</head>
+<body>
+  <div class="notice" role="status">
+    <p>Redirecting to <a href="https://github.com/erozak">github.com/erozak</a><br/>in <b id="count">5</b> seconds…</p>
+    <span class="notice-light" aria-hidden="true"></span>
+  </div>
+  <script>
+    var remaining = 5;
+    var count = document.getElementById("count");
+    var timer = setInterval(function () {
+      remaining -= 1;
+      count.textContent = remaining;
+      if (remaining <= 0) {
+        clearInterval(timer);
+        location.replace("https://github.com/erozak");
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

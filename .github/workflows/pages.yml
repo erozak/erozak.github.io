@@ -1,0 +1,50 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  SITE_DIR: site
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Nothing is published until the site directory exists.
+      - name: Check for site content
+        id: check
+        run: |
+          if [ -n "$(ls -A "$SITE_DIR" 2>/dev/null)" ]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No $SITE_DIR/ content found; skipping deploy."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/configure-pages@v5
+        if: steps.check.outputs.publish == 'true'
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.check.outputs.publish == 'true'
+        with:
+          path: ${{ env.SITE_DIR }}
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
+        if: steps.check.outputs.publish == 'true'
